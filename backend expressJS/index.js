@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 8080;
 // 1. Configurar archivos estáticos de Angular inmediatamente
 app.use(express.static(path.join(__dirname, 'public')));
     
-app.get('*', (req, res) => {
+// Usar expresión regular compatible con Express moderno para el comodín de Angular
+app.get(/^(?!\/api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
