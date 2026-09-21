@@ -5,7 +5,7 @@ const { db } = require("./env");
 
 const pool = mysql.createPool({
   host: db.host,
-  port: db.port,
+  port: Number(db.port) || 23864, // Forzamos el puerto de Aiven por si env.js no lo lee
   user: db.user,
   password: db.pass,
   database: db.name,
