@@ -6,7 +6,9 @@ const { testConnection } = require("./src/config/database");
 const { iniciarJobAlertas } = require("./src/jobs/alertas.job");
 
 const PORT = process.env.PORT || 3000;
-
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
 async function iniciarServidor() {
   try {
     await testConnection();
