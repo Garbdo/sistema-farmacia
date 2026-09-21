@@ -11,4 +11,4 @@ router.get("/:id", requireLogin, medicamentosController.obtenerMedicamento); // 
 router.post("/", requireLogin, requireRole("Administrador/Gerente", "Farmacéutico Regente"), medicamentosController.guardarMedicamento);
 router.delete("/:id", requireLogin, requireRole("Administrador/Gerente"), medicamentosController.inactivarMedicamento);
 
-module.exports = router;
+module.exports = router;    
