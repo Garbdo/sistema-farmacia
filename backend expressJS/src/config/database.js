@@ -3,7 +3,23 @@
 const mysql = require("mysql2/promise");
 const { db } = require("./env");
 
-// Creamos el pool directamente sin bloqueos síncronos pesados
+// ==========================================
+// ELIJE TU CONEXIÓN (Descomenta SOLO una)
+// ==========================================
+
+// --- OPCIÓN 1: CONEXIÓN LOCAL (XAMPP) ---
+const pool = mysql.createPool({
+  host: db.host,
+  port: Number(db.port) || 3306,
+  user: db.user,
+  password: db.pass,
+  database: db.name,
+  charset: db.charset,
+  dateStrings: true
+});
+
+// --- OPCIÓN 2: CONEXIÓN EN LA NUBE (Aiven) ---
+/*
 const pool = mysql.createPool({
   host: db.host,
   port: Number(db.port) || 23864,
@@ -13,12 +29,13 @@ const pool = mysql.createPool({
   charset: db.charset,
   dateStrings: true,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false // Obligatorio para Aiven
   }
 });
+*/
 
 async function testConnection() {
-  console.log("-> Intentando conectar a MySQL en:", db.host, "puerto:", db.port || 23864);
+  console.log(`-> Intentando conectar a MySQL en: ${db.host} puerto: ${Number(db.port) || 3306}`);
   try {
     const conn = await pool.getConnection();
     console.log("¡Conexión de prueba con MySQL establecida con éxito!");
