@@ -5,11 +5,15 @@ const { db } = require("./env");
 
 const pool = mysql.createPool({
   host: db.host,
+  port: db.port,
   user: db.user,
   password: db.pass,
   database: db.name,
   charset: db.charset,
   dateStrings: true,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 async function testConnection() {
