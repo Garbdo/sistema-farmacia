@@ -1,16 +1,15 @@
 "use strict";
 
-const express = require('express'); // Asegúrate de tener esto importado si no lo tenías
-const path = require('path');         // Asegúrate de tener esto importado si no lo tenías
+const express = require('express'); 
+const path = require('path');        
 
 const app = require("./src/app");
 const env = require("./src/config/env");
 const { testConnection } = require("./src/config/database");
 const { iniciarJobAlertas } = require("./src/jobs/alertas.job");
 
-const PORT = process.env.PORT || 3000;
-
-// (Si ya tenías tu app.listen aquí o en iniciarServidor, déjalo tal cual)
+// Cloud Run asigna el puerto automáticamente, por defecto 8080
+const PORT = process.env.PORT || 8080;
 
 async function iniciarServidor() {
   try {
@@ -20,18 +19,16 @@ async function iniciarServidor() {
     iniciarJobAlertas();
     console.log("Job de alertas (FEFO/Stock) activado.");
 
-    // ==========================================
-    // AGREGAR ESTO AQUÍ ABAJO (sin tocar nada de arriba)
-    // ==========================================
-    app.use(express.static(path.join(__dirname, '../public')));
+    // Servir la carpeta public desde la raíz (donde está index.js)
+    app.use(express.static(path.join(__dirname, 'public')));
     
     app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../public', 'index.html'));
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
-    // ==========================================
 
-    app.listen(PORT, () => {
-      console.log(`\nServidor Express corriendo en http://localhost:${PORT}`);
+    // Escuchar en '0.0.0.0' y en el puerto dinámico de Cloud Run
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`\nServidor Express corriendo en el puerto ${PORT}`);
       console.log(`Catálogo disponible en http://localhost:${PORT}/api/catalogo`);
     });
   } catch (error) {
